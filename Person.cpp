@@ -1,5 +1,5 @@
 //Anthony Franklin afranklin18@cnm.edu
-//1/20/2020
+//1/27/2022
 
 //Person.cpp
 
@@ -7,36 +7,57 @@
 
 Person::Person(string p, Date d)
 {
-    name = p, bday = d;
-    bday.SetDesc(name);
+    
+    SetBirthday(d);
+    name = p;
+    bday.SetDesc(p);
     CalcAge();
 }
 
 Person::Person(string p, int m, int d, int y)
 {
     name = p;
-    bday.SetDate(m, d, y);
-    bday.SetDesc(name); 
+    SetBirthday(m, d, y); 
     CalcAge();
 }
 void Person::CalcAge()
 {
     Date Today;
-    //I also code this to work like (Today < bday)? etc....
     ((Today.GetYear() < bday.GetYear()) || (Today.GetYear() == bday.GetYear()) && (Today.GetMonth() <= bday.GetMonth()) && (Today.GetDay() < bday.GetDay())) ? age = 0 : ((Today.GetMonth() <= bday.GetMonth()) && (Today.GetDay() < bday.GetDay())) ? age = (Today.GetYear() - bday.GetYear()-1) :  age = Today.GetYear() - bday.GetYear();
 }
 void Person::SetBirthday(int m, int d, int y)
 {
-    bday.SetDate(m,d,y);
-    bday.SetDesc(name);
-    CalcAge();
+    Date temp(m, d, y, name);
+    if (temp.GetYearMonthDay().ok())
+    {
+        bday.SetDate(m, d, y,name);
+        CalcAge();
+    }
+    else
+    {
+        Date defaultDate;
+        bday = defaultDate;
+        name = "INVALID BIRTHDATE ENTRY!";
+        CalcAge();
+    }
+    
 }
 
 void Person::SetBirthday(Date d)
 {
-    bday.SetDate(d);
-    bday.SetDesc(name);
-    CalcAge();
+    if (d.GetYearMonthDay().ok())
+    {
+        bday = d;
+        CalcAge();
+    }
+    else
+    {
+        Date defaultDate;
+        bday = defaultDate;
+        name = "INVALID BIRTHDATE ENTRY!";
+        CalcAge();
+    }
+    
 }
 
 string Person::GetNameAge()
@@ -46,7 +67,7 @@ string Person::GetNameAge()
 
 string Person::GetFullDesc()
 {
-    return string("\nName:" + bday.GetDescription() + "\nAge: " + to_string(age)+ "\nDate of Birth: " + bday.GetFormattedDate());
+    return string("\nName:" + name + "\nAge: " + to_string(age)+ "\nDate of Birth: " + bday.GetFormattedDate());
 }
 
 Date Person::GetBirthDay()

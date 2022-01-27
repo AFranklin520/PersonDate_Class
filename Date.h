@@ -1,47 +1,36 @@
 //Anthony Franklin afranklin18@cnm.edu
-//1/20/2020
+//1/27/2022
 
 //File: Date.h
 
 #ifndef _DATE_H
 #define _DATE_H
 
-#include <chrono>
 #include <string>
-using namespace std::chrono;
+#include <chrono>
+using namespace std;
 
 class Date
 {
 private:
-	year_month_day today = year_month_day{ floor<days>(system_clock::now()) };
-	int yr{ static_cast<int>(today.year()) };
-	unsigned mon{ static_cast<unsigned>(today.month()) };
-	unsigned day{ static_cast<unsigned>(today.day()) };
-	year_month_day ymd;
-	std::string description {""};
+	int month{ 1 }, day{ 1 }, year{ 2020 };
+
+	
+	string description;
+	chrono::year_month_day ymd;
 
 public:
 	Date();
-	Date(std::string desc, int m, int d, int y); 
-
-	void SetDesc(std::string d) { description = d; }
-	void SetDate(int m, int d, int y);
-	void SetDate(Date d);
-
-	year_month_day GetYMD();
-	bool ok() { return ymd.ok(); }
-	std::string GetFormattedDate();
-	int GetYear() { return yr; }
-	int GetMonth() { return mon; }
+	Date(int m, int d, int y, string desc);
+	void SetDate(int m, int d, int y, string desc);
+	void SetDesc(string d) { description = d; }
+	 
+	
+	string GetFormattedDate();
+	int GetYear() { return year; }
+	int GetMonth() { return month; }
 	int GetDay() { return day; }
-	std::string GetDescription() { return description; }
-
-	//Overloading operators
-	bool operator < (Date d);
-	bool operator > (Date d);
-	bool operator <= (Date d);
-	bool operator >= (Date d);
-	bool operator == (Date d);
+	chrono::year_month_day GetYearMonthDay() const { return ymd; }
 };
 
 #endif

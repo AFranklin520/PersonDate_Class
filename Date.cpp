@@ -1,38 +1,31 @@
 //Anthony Franklin afranklin18@cnm.edu
-//1/20/2020
+//1/27/2022
 
 //Date.cpp
-
+#include <chrono>
 #include "Date.h"
 
 Date::Date()
 {	//Set the Date variables to the computer's date.
-	ymd = year_month_day{ floor<days>(system_clock::now()) };
-
+	ymd = std::chrono::year_month_day{ std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now()) };
+	year = static_cast<int>(ymd.year());
+	month = static_cast<unsigned>(ymd.month());
+	day = static_cast<unsigned>(ymd.day());
 	description = "Today's Date";
 }
-Date::Date(std::string desc, int m, int d, int y)
+Date::Date(int m, int d, int y, string desc)
 {
 	description = desc;
-	SetDate(m,d,y);
+	SetDate(m,d,y,desc);
 
 }
-void Date::SetDate(int m, int d, int y)
+void Date::SetDate(int m, int d, int y, string desc)
 {
-	mon = m, day = d, yr = y;
-	ymd = year{ y } / month{ static_cast<unsigned>(m) } / d;
+	description = desc;
+	month = m, day = d, year = y;
+	ymd = std::chrono::year{ y } / static_cast<unsigned>(m) / d;
 }
-void Date::SetDate(Date d)
-{
-	mon = d.mon;
-	yr = d.yr;
-	day = d.day;
-	ymd = year{ static_cast<int>(d.yr) } / month{ static_cast<unsigned>(d.mon) } / d.day;
-}
-year_month_day Date::GetYMD()
-{
-	return ymd;
-}
+
 std::string Date::GetFormattedDate()
 {
 	std::ostringstream y;
@@ -42,32 +35,8 @@ std::string Date::GetFormattedDate()
 		"September", "October", "November", "December" };
 
 
-	y << monName[mon-1] << " " << day
-		<< ", " << yr;
+	y << monName[month-1] << " " << day
+		<< ", " << year;
 	return y.str();
 }
 
-bool Date::operator<(Date d)
-{
-	return sys_days{ ymd } < sys_days{ d.GetYMD()};
-}
-
-bool Date::operator>(Date d)
-{
-	return sys_days{ ymd } > sys_days{ d.GetYMD() };
-}
-
-bool Date::operator<=(Date d)
-{
-	return sys_days{ ymd } <= sys_days{ d.GetYMD() };
-}
-
-bool Date::operator>=(Date d)
-{
-	return sys_days{ ymd } >= sys_days{ d.GetYMD() };
-}
-
-bool Date::operator==(Date d)
-{
-	return sys_days{ ymd } == sys_days{ d.GetYMD() };
-}
